@@ -17,26 +17,23 @@ class my_game:
         checkMate = False
         if self.is_game_over(who):  # if game over stop search
             return cc.min_val
-        #if depth == 1:  # stop search 
-            # print(self.evaluate(who))
-            #return self.quiescence_search(self, depth, alpha, beta, who)
-            #return self.evaluate(who)
         move_list, capture_list = self.board.generate_move(who,checkMate)  # list các nước đi
-        if depth == 1:  # stop search 
-            #return self.evaluate(who)
-            if len(capture_list) == 0:
-                return self.evaluate(who)
-            else:
-                return self.quiescence_search(depth, alpha, beta, (who+1)%2)
-
+            
         # 利用历史表0
         for i in range(len(move_list)):
             move_list[i].score = self.history_table.get_history_score(who, move_list[i])
         move_list.sort()  # move_ordering
+        if depth == 1:  # stop search 
+            if len(capture_list) == 0: 
+                return self.evaluate(who)
+            else: return self.quiescence_search(alpha, beta, who)
+        
+        #else:
+         #   return self.quiescence_search(alpha, beta, (who+1)%2)
         # for item in move_list:
         #     print(item.score)
         # print('----------------------')
-        if checkMate == False and allowNull == True and depth>=3:
+        '''if checkMate == False and allowNull == True and depth>=3:
             # print ("***********************")
             who = (who+1)%2
             allowNull = False
@@ -45,9 +42,7 @@ class my_game:
             if(eval >= beta):
                 print ("***********************")
                 return eval; # Cutoff
-        else: 
-            checkMate = False 
-            #
+            #'''
         best_step = move_list[0]
         score_list = []
         for step in move_list:
@@ -63,6 +58,8 @@ class my_game:
             if alpha >= beta:
                 best_step = step
                 break
+        if best_step.from_x == -1:
+            self.best_move = best_step
         # print(score_list)
         # update history_table
         
@@ -137,7 +134,6 @@ class my_game:
                         #         print('###################')
                         #         self.board.print_board()
                         #         print('###################')
-
                         relation_list[item.to_x][item.to_y].attacked[
                             relation_list[item.to_x][item.to_y].num_attacked] = type
                         relation_list[item.to_x][item.to_y].num_attacked += 1
@@ -229,16 +225,16 @@ class my_game:
         else:
             return my_min_val - my_max_val
     
-    def quiescence_search(self, depth, alpha, beta, who):
+    def quiescence_search(self, alpha, beta, who):
         stand_pat = self.evaluate(who)
         if stand_pat >= beta:
             return beta
         if alpha < stand_pat:
             alpha = stand_pat
-        move_list, capture_list = self.board.generate_move(who,checkMate=False)
+        move_list, capture_list = self.board.generate_move((who+1),checkMate=False)
         for step in capture_list:
             temp = self.move_to(step)
-            score = -self.quiescence_search(depth - 1, -beta, -alpha, who)
+            score = -self.quiescence_search(-beta, -alpha, who)
             self.undo_move(step, temp)
             if score >= beta:
                 return beta
@@ -249,7 +245,7 @@ class my_game:
 
     def init_relation_list(self):
         res_list = []
-        for i in range(9):
+        for i in range(10):
             res_list.append([])
             for j in range(10):
                 res_list[i].append(mr.relation())

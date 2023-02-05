@@ -265,7 +265,7 @@ class Pawns(Pieces):
     def getScoreWeight(self, listpieces):
         score = 2
         return score
-
+################
 def listPiecestoArr(piecesList):
     arr = [[0 for i in range(10)] for j in range(9)]
     for i in range(0, 9):

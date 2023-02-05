@@ -51,20 +51,30 @@ class MainGame():
         MainGame.window = pygame.display.set_mode([constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT])
         pygame.display.set_caption("Cờ Tướng AI")
         MainGame.button_go = Button(MainGame.window, "Start Game", constants.SCREEN_WIDTH - 100, 300)  
-        self.piecesInit()
+        MainGame.button_list = Button(MainGame.window, "list", constants.SCREEN_WIDTH - 100, 400)  
 
+        self.piecesInit()
+        self.show_list = False 
         while True:
             time.sleep(0.1)
             MainGame.window.fill(constants.BG_COLOR)
             self.drawChessboard()
             MainGame.button_go.draw_button()
+            MainGame.button_list.draw_button()
             self.piecesDisplay()
             self.VictoryOrDefeat()
             self.Computerplay()
             self.getEvent()
-            self.show_toolbar()
+            
+            #self.show_toolbar()
+            
             pygame.display.update()
             pygame.display.flip()
+
+
+
+
+
             
     def getEvent(self):
         for event in pygame.event.get():
@@ -77,7 +87,7 @@ class MainGame():
                     self.show_toolbar()
                     
     def show_toolbar(self):
-        options = ['Restart', 'Exit']
+        options = ['Restart', 'Exit', 'Depth']
         x = constants.SCREEN_WIDTH - 100
         y = 350
         for option in options:
@@ -154,7 +164,7 @@ class MainGame():
         MainGame.piecesList.append(pieces.Pawns(MainGame.player1Color, 6, 6,'Pawns'))
         MainGame.piecesList.append(pieces.Pawns(MainGame.player1Color, 8, 6,'Pawns'))
         
-        print(MainGame.piecesList)
+        #print(MainGame.piecesList)
 
     def piecesDisplay(self):
         for item in MainGame.piecesList:
@@ -198,10 +208,20 @@ class MainGame():
                 else:
                     print("out")
                 if MainGame.button_go.is_click():
+                        #self.restart()
+                    print("button_go click")
+                elif MainGame.button_list.is_click():
+                    # toggle the self.show_list flag
+                    self.show_list = not self.show_list
+                    print("button_list click")
+                else:
+                    print("neither button click")
+                    '''
+                if MainGame.button_go.is_click():
                     #self.restart()
                     print("button_go click")
                 else:
-                    print("button_go click out")
+                    print("button_go click out")'''
 
     def PutdownPieces(self, t, x, y):
         selectfilter=list(filter(lambda cm: cm.x == x and cm.y == y and cm.player == MainGame.player1Color,MainGame.piecesList))

@@ -20,7 +20,6 @@ def movedeep(listpieces, deepstep, player, x1, y1, x2, y2, mgInit):
     t = mgInit.best_move
     mgInit.move_to(t)
     print(mgInit.cnt)
-    print("diao nao")
     print(t)
     # return t
     arr = listPiecestoArr(listpieces)
@@ -31,18 +30,23 @@ def movedeep(listpieces, deepstep, player, x1, y1, x2, y2, mgInit):
             for item in listpieces:
 
                 if item.x == 8 - t.from_x and item.y == t.from_y:
-
                     listMoveEnabel.append([item, 8 - t.to_x, t.to_y])
+                
+
 
 
     #
-    # print(listMoveEnabel)
+    #print(listMoveEnabel)
+    if not listMoveEnabel:
+        listMoveEnabel.append([item, 8 - t.to_x, t.to_y])
     piecesbest = listMoveEnabel[0]
+    return piecesbest
+        
     # print(piecesbest)
     # print("test")
     # print(piecesbest[0])
     # print("test")
-    return piecesbest
+    #return piecesbest
 
 
 
