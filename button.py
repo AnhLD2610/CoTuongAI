@@ -37,5 +37,9 @@ class Button():
 
         in_x = x < point_x < x + w
         in_y = y < point_y < y + h
-        return in_x and in_y
+        
+        if in_x and in_y and pygame.mouse.get_pressed()[0] == 1:
+            return True
+        else:
+            return False
 

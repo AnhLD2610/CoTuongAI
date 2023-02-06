@@ -1,10 +1,14 @@
-import pygame
+import pygame 
+from OptionBox import OptionBox
 import time
 import constants
 from button import Button
 import pieces
 import computer
 import my_game as mg
+import chess_constants
+
+
 
 class MainGame():
     window = None
@@ -28,6 +32,20 @@ class MainGame():
 
     button_go = None
     piecesList = []
+    
+    pygame.init()
+    clock = pygame.time.Clock()
+    window = pygame.display.set_mode((640, 480))
+
+    list1 = OptionBox(
+        40, 40, 160, 40, (150, 150, 150), (100, 200, 255), pygame.font.SysFont(None, 30), 
+        ["option 1", "2nd option", "another option"])
+
+    
+
+
+
+    
     '''
     def start_game(self):
         MainGame.window = pygame.display.set_mode([constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT])
@@ -50,52 +68,25 @@ class MainGame():
     def start_game(self):
         MainGame.window = pygame.display.set_mode([constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT])
         pygame.display.set_caption("Cờ Tướng AI")
-        MainGame.button_go = Button(MainGame.window, "Start Game", constants.SCREEN_WIDTH - 100, 300)  
-        MainGame.button_list = Button(MainGame.window, "list", constants.SCREEN_WIDTH - 100, 400)  
-
+        MainGame.button_list = Button(MainGame.window, "List", constants.SCREEN_WIDTH - 100, 300)  
         self.piecesInit()
-        self.show_list = False 
+        self.show_list = False
         while True:
             time.sleep(0.1)
             MainGame.window.fill(constants.BG_COLOR)
             self.drawChessboard()
-            MainGame.button_go.draw_button()
             MainGame.button_list.draw_button()
             self.piecesDisplay()
             self.VictoryOrDefeat()
             self.Computerplay()
             self.getEvent()
+            if self.show_list:
+                self.list1.draw(MainGame.window)
             
-            #self.show_toolbar()
-            
-            pygame.display.update()
+            #pygame.display.update()
             pygame.display.flip()
 
-
-
-
-
-            
-    def getEvent(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.MOUSEBUTTONUP:
-                mouse_pos = event.pos
-                if MainGame.button_go.is_mouse_selection(mouse_pos):
-                    self.show_toolbar()
-                    
-    def show_toolbar(self):
-        options = ['Restart', 'Exit', 'Depth']
-        x = constants.SCREEN_WIDTH - 100
-        y = 350
-        for option in options:
-            font = pygame.font.Font(None, 20)
-            text = font.render(option, True, (0, 0, 0))
-            MainGame.window.blit(text, (x, y))
-            y += 25
-        
+    
 
     def drawChessboard(self):
         mid_end_y = MainGame.Start_Y + 4 * MainGame.Line_Span
@@ -172,12 +163,21 @@ class MainGame():
             #MainGame.window.blit(item.image, item.rect)
 
     def getEvent(self):
-        # nhận tất cả event
         eventList = pygame.event.get()
         for event in eventList:
             if event.type == pygame.QUIT:
                 self.endGame()
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                
+                selected_option = self.list1.update(eventList)
+                if selected_option == 0:
+                    chess_constants.change_depth(2)
+                elif selected_option == 1:
+                    chess_constants.change_depth(3)
+                elif selected_option == 2:
+                    chess_constants.change_depth(4)
+                print(chess_constants.max_depth,"sgsdfgdsfgdgfsfdg")
+                
                 pos = pygame.mouse.get_pos()
                 mouse_x = pos[0]
                 mouse_y = pos[1]
@@ -204,24 +204,17 @@ class MainGame():
                         MainGame.clickx=click_x
                         MainGame.clicky=click_y
                         self.PutdownPieces(MainGame.player1Color, click_x, click_y)
-
-                else:
-                    print("out")
-                if MainGame.button_go.is_click():
-                        #self.restart()
-                    print("button_go click")
-                elif MainGame.button_list.is_click():
-                    # toggle the self.show_list flag
-                    self.show_list = not self.show_list
-                    print("button_list click")
-                else:
-                    print("neither button click")
-                    '''
-                if MainGame.button_go.is_click():
-                    #self.restart()
-                    print("button_go click")
-                else:
-                    print("button_go click out")'''
+                        
+                elif self.button_list.is_click():
+                    # create a drop_down-menu
+                    
+                    if self.button_list.is_click():
+                        self.show_list = not self.show_list    
+                    
+                    
+                
+                    
+                
 
     def PutdownPieces(self, t, x, y):
         selectfilter=list(filter(lambda cm: cm.x == x and cm.y == y and cm.player == MainGame.player1Color,MainGame.piecesList))
@@ -297,7 +290,10 @@ class MainGame():
         font = pygame.font.SysFont('kaiti', 18)
         txt = font.render(text, True, constants.TEXT_COLOR)
         return txt
-
+    
+    def restart(self):
+        self.piecesInit()
+        self.show_list = False
     def endGame(self):
         print("exit")
         exit()

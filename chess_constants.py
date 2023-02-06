@@ -26,7 +26,10 @@ init_borad = [
     [che, kong, kong, bing, kong, kong, bing, kong, kong, che]
 ]
 # 最大步数
+
 max_depth = 4
+def change_depth(x):
+    max_depth = x 
 # 最大值，最小值
 max_val = 1000000
 min_val = -1000000
