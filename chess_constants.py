@@ -27,9 +27,7 @@ init_borad = [
 ]
 # 最大步数
 
-max_depth = 4
-def change_depth(x):
-    max_depth = x 
+max_depth = 2
 # 最大值，最小值
 max_val = 1000000
 min_val = -1000000

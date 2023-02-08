@@ -6,7 +6,7 @@ from button import Button
 import pieces
 import computer
 import my_game as mg
-import chess_constants
+import chess_constants as cc 
 
 
 
@@ -34,43 +34,20 @@ class MainGame():
     piecesList = []
     
     pygame.init()
-    clock = pygame.time.Clock()
-    window = pygame.display.set_mode((640, 480))
 
     list1 = OptionBox(
         40, 40, 160, 40, (150, 150, 150), (100, 200, 255), pygame.font.SysFont(None, 30), 
         ["option 1", "2nd option", "another option"])
 
     
-
-
-
-    
-    '''
-    def start_game(self):
-        MainGame.window = pygame.display.set_mode([constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT])
-        pygame.display.set_caption("Cờ Tướng AI")
-        MainGame.button_go = Button(MainGame.window, "restart", constants.SCREEN_WIDTH - 100, 300)  
-        self.piecesInit()
-
-        while True:
-            time.sleep(0.1)
-            MainGame.window.fill(constants.BG_COLOR)
-            self.drawChessboard()
-            #MainGame.button_go.draw_button()
-            self.piecesDisplay()
-            self.VictoryOrDefeat()
-            self.Computerplay()
-            self.getEvent()
-            pygame.display.update()
-            pygame.display.flip()
-    '''        
     def start_game(self):
         MainGame.window = pygame.display.set_mode([constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT])
         pygame.display.set_caption("Cờ Tướng AI")
         MainGame.button_list = Button(MainGame.window, "List", constants.SCREEN_WIDTH - 100, 300)  
         self.piecesInit()
         self.show_list = False
+      
+        
         while True:
             time.sleep(0.1)
             MainGame.window.fill(constants.BG_COLOR)
@@ -78,14 +55,15 @@ class MainGame():
             MainGame.button_list.draw_button()
             self.piecesDisplay()
             self.VictoryOrDefeat()
-            self.Computerplay()
-            self.getEvent()
             if self.show_list:
                 self.list1.draw(MainGame.window)
+            self.getEvent()
+            self.Computerplay()
             
             #pygame.display.update()
             pygame.display.flip()
-
+        
+        
     
 
     def drawChessboard(self):
@@ -161,23 +139,24 @@ class MainGame():
         for item in MainGame.piecesList:
             item.displaypieces(MainGame.window)
             #MainGame.window.blit(item.image, item.rect)
-
+    
     def getEvent(self):
         eventList = pygame.event.get()
         for event in eventList:
             if event.type == pygame.QUIT:
                 self.endGame()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                
                 selected_option = self.list1.update(eventList)
-                if selected_option == 0:
-                    chess_constants.change_depth(2)
-                elif selected_option == 1:
-                    chess_constants.change_depth(3)
-                elif selected_option == 2:
-                    chess_constants.change_depth(4)
-                print(chess_constants.max_depth,"sgsdfgdsfgdgfsfdg")
-                
+                if selected_option >= 0:
+                    if selected_option == 0:
+                        cc.max_depth = 2
+                    elif selected_option == 1:
+                        cc.max_depth = 3
+                    elif selected_option == 2:
+                        cc.max_depth = 4
+                print("*****")
+                print(selected_option)
+                print("*******")
                 pos = pygame.mouse.get_pos()
                 mouse_x = pos[0]
                 mouse_y = pos[1]
@@ -209,7 +188,8 @@ class MainGame():
                     # create a drop_down-menu
                     
                     if self.button_list.is_click():
-                        self.show_list = not self.show_list    
+                        self.show_list = not self.show_list   
+                    
                     
                     
                 
