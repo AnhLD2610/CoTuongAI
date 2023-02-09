@@ -27,7 +27,7 @@ init_borad = [
 ]
 # 最大步数
 
-max_depth = 2
+max_depth = 5
 # 最大值，最小值
 max_val = 1000000
 min_val = -1000000

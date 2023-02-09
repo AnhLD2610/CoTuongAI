@@ -36,14 +36,14 @@ class MainGame():
     pygame.init()
 
     list1 = OptionBox(
-        40, 40, 160, 40, (150, 150, 150), (100, 200, 255), pygame.font.SysFont(None, 30), 
-        ["option 1", "2nd option", "another option"])
+        735, 320, 160, 40, (150, 150, 150), (100, 200, 255), pygame.font.SysFont(None, 30), 
+        ["2", "3", "4"])
 
     
     def start_game(self):
         MainGame.window = pygame.display.set_mode([constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT])
         pygame.display.set_caption("Cờ Tướng AI")
-        MainGame.button_list = Button(MainGame.window, "List", constants.SCREEN_WIDTH - 100, 300)  
+        MainGame.button_list = Button(MainGame.window, "Depth", constants.SCREEN_WIDTH - 200, 300)  
         self.piecesInit()
         self.show_list = False
       
@@ -267,7 +267,7 @@ class MainGame():
     def getTextSuface(self, text):
         pygame.font.init()
         # print(pygame.font.get_fonts())
-        font = pygame.font.SysFont('kaiti', 18)
+        font = pygame.font.SysFont('kaiti', 50)
         txt = font.render(text, True, constants.TEXT_COLOR)
         return txt
     

@@ -10,11 +10,10 @@ player1Color = 1
 player2Color = 2
 overColor = 3
 
-BG_COLOR=pygame.Color(200, 200, 200)
+BG_COLOR=pygame.Color (222, 184, 135)
 Line_COLOR=pygame.Color(255, 255, 200)
 TEXT_COLOR=pygame.Color(255, 0, 0)
 
-# 定义颜色
 BLACK = ( 0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
