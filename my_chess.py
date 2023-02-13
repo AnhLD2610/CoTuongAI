@@ -1,20 +1,16 @@
 import chess_constants as cc
 
-'''
-任务需求：返回所有可以走的步法--step类型的list，score不用管
-'''
-
 
 class chess:
     def __init__(self, belong, chess_type):
-        self.belong = belong  # 属于那方
-        self.chess_type = chess_type  # 是什么棋
+        self.belong = belong  # thuộc bên nào
+        self.chess_type = chess_type  # loại quân cờ
 
-    def can_move(self, to_x, to_y):  # 返回能不能往哪个地方走
+    def can_move(self, to_x, to_y):  
         return False
 
 
-class step:  # 走法类
+class step:  # di chuyển 
     def __init__(self, from_x=-1, from_y=-1, to_x=-1, to_y=-1):
         self.from_x = from_x
         self.from_y = from_y
@@ -63,7 +59,7 @@ class chess_board:
         a = False
         if who == 1:
             for i in range(9, 6, -1):
-                if self.board[x][i].chess_type == cc.jiang:
+                if self.board[x][i].chess_type == cc.vua:
                     a = True
                     b = i
             if not a:
@@ -74,7 +70,7 @@ class chess_board:
             return b
         else:
             for i in range(0, 3):
-                if self.board[x][i].chess_type == cc.jiang:
+                if self.board[x][i].chess_type == cc.vua:
                     a = True
                     b = i
             if not a:

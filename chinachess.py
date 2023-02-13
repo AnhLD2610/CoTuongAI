@@ -51,17 +51,16 @@ class MainGame():
         while True:
             time.sleep(0.1)
             MainGame.window.fill(constants.BG_COLOR)
-            self.drawChessboard()
             MainGame.button_list.draw_button()
-            self.piecesDisplay()
-            self.VictoryOrDefeat()
             if self.show_list:
                 self.list1.draw(MainGame.window)
             self.getEvent()
-            self.Computerplay()
-            
-            #pygame.display.update()
+            self.drawChessboard()
+            self.piecesDisplay()
+            self.VictoryOrDefeat()
             pygame.display.flip()
+            self.Computerplay()
+            #pygame.display.flip()
         
         
     
@@ -154,9 +153,6 @@ class MainGame():
                         cc.max_depth = 3
                     elif selected_option == 2:
                         cc.max_depth = 4
-                print("*****")
-                print(selected_option)
-                print("*******")
                 pos = pygame.mouse.get_pos()
                 mouse_x = pos[0]
                 mouse_y = pos[1]
@@ -203,7 +199,6 @@ class MainGame():
             return
 
         if MainGame.piecesSelected :
-            #print("1111")
 
             arr = pieces.listPiecestoArr(MainGame.piecesList)
             if MainGame.piecesSelected.canmove(arr, x, y):
@@ -258,10 +253,10 @@ class MainGame():
         if len(result)==0:
             return
         if result[0] == MainGame.player1Color :
-            txt = "defeated！"
-        else:
-            txt = "won！"
-        MainGame.window.blit(self.getTextSuface("%s" % txt), (constants.SCREEN_WIDTH - 100, 200))
+            txt = "DEFEATED !"
+        else: 
+            txt = "WIN !"
+        MainGame.window.blit(self.getTextSuface("%s" % txt), (constants.SCREEN_WIDTH - 250, 200))
         MainGame.Putdownflag = constants.overColor
 
     def getTextSuface(self, text):

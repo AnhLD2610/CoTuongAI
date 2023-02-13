@@ -1,41 +1,34 @@
-'''
-所有的常量都写在这个文件里
-'''
-# 两个玩家
 my_max = True
 my_min = False
-# 八个棋子
+# quân cờ
 kong = 0 # ô trống 
-jiang = 1 # vua 
-che = 2 # xe
+vua = 1 # vua 
+xe = 2 # xe
 ma = 3 # ma
-pao = 4 #phao
-xiang = 5 #tuong
-shi = 6 #sy
-bing = 7 #tot
-# 初始化的棋盘
+phao = 4 #phao
+tuong = 5 #tuong
+si = 6 #sy
+tot = 7 #tot
+# bàn cờ
 init_borad = [
-    [che, kong, kong, bing, kong, kong, bing, kong, kong, che],
-    [ma, kong, pao, kong, kong, kong, kong, pao, kong, ma],
-    [xiang, kong, kong, bing, kong, kong, bing, kong, kong, xiang],
-    [shi, kong, kong, kong, kong, kong, kong, kong, kong, shi],
-    [jiang, kong, kong, bing, kong, kong, bing, kong, kong, jiang],
-    [shi, kong, kong, kong, kong, kong, kong, kong, kong, shi],
-    [xiang, kong, kong, bing, kong, kong, bing, kong, kong, xiang],
-    [ma, kong, pao, kong, kong, kong, kong, pao, kong, ma],
-    [che, kong, kong, bing, kong, kong, bing, kong, kong, che]
+    [xe, kong, kong, tot, kong, kong, tot, kong, kong, xe],
+    [ma, kong, phao, kong, kong, kong, kong, phao, kong, ma],
+    [tuong, kong, kong, tot, kong, kong, tot, kong, kong, tuong],
+    [si, kong, kong, kong, kong, kong, kong, kong, kong, si],
+    [vua, kong, kong, tot, kong, kong, tot, kong, kong, vua],
+    [si, kong, kong, kong, kong, kong, kong, kong, kong, si],
+    [tuong, kong, kong, tot, kong, kong, tot, kong, kong, tuong],
+    [ma, kong, phao, kong, kong, kong, kong, phao, kong, ma],
+    [xe, kong, kong, tot, kong, kong, tot, kong, kong, xe]
 ]
-# 最大步数
 
-max_depth = 5
-# 最大值，最小值
+max_depth = 3
 max_val = 1000000
 min_val = -1000000
-# 评估方法
-base_val = [0, 0, 500, 300, 300, 250, 250, 80]
+base_val = [0, 1000000, 500, 250, 300, 150, 150, 100]
 mobile_val = [0, 0, 6, 12, 6, 1, 1, 15]
 pos_val = [
-    [  # 空
+    [  # o trong
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -45,7 +38,7 @@ pos_val = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [  # 将
+    [  # tuong
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -56,7 +49,7 @@ pos_val = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ],
-    [  # 车
+    [  # xe
         -6, 5, -2, 4, 8, 8, 6, 6, 6, 6,
         6, 8, 8, 9, 12, 11, 13, 8, 12, 8,
         4, 6, 4, 4, 12, 11, 13, 7, 9, 7,
@@ -67,7 +60,7 @@ pos_val = [
         6, 8, 8, 9, 12, 11, 13, 8, 12, 8,
         -6, 5, -2, 4, 8, 8, 6, 6, 6, 6
     ],
-    [  # 马
+    [  # ma
         0, -3, 5, 4, 2, 2, 5, 4, 2, 2,
         -3, 2, 4, 6, 10, 12, 20, 10, 8, 2,
         2, 4, 6, 10, 13, 11, 12, 11, 15, 2,
@@ -78,7 +71,7 @@ pos_val = [
         -3, 2, 4, 6, 10, 12, 20, 10, 8, 2,
         0, -3, 5, 4, 2, 2, 5, 4, 2, 2
     ],
-    [  # 炮
+    [  # phao
         0, 0, 1, 0, -1, 0, 0, 1, 2, 4,
         0, 1, 0, 0, 0, 0, 3, 1, 2, 4,
         1, 2, 4, 0, 3, 0, 3, 0, 0, 0,
@@ -89,7 +82,7 @@ pos_val = [
         0, 1, 0, 0, 0, 0, 3, 1, 2, 4,
         0, 0, 1, 0, -1, 0, 0, 1, 2, 4
     ],
-    [  # 相
+    [  # tượng
         0, 0, -2, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -100,7 +93,7 @@ pos_val = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, -2, 0, 0, 0, 0, 0, 0, 0
     ],
-    [  # 士
+    [  # sĩ
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -111,7 +104,7 @@ pos_val = [
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ],
-    [  # 兵
+    [  # tốt
         0, 0, 0, -2, 3, 10, 20, 20, 20, 0,
         0, 0, 0, 0, 0, 18, 27, 30, 30, 0,
         0, 0, 0, -2, 4, 22, 30, 45, 50, 0,
