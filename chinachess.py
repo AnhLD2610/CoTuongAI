@@ -9,7 +9,6 @@ import my_game as mg
 import chess_constants as cc 
 
 
-
 class MainGame():
     window = None
     Start_X = constants.Start_X
@@ -36,8 +35,8 @@ class MainGame():
     pygame.init()
 
     list1 = OptionBox(
-        735, 320, 160, 40, (150, 150, 150), (100, 200, 255), pygame.font.SysFont(None, 30), 
-        ["2", "3", "4"])
+        665, 335, 160, 40, (150, 150, 150), (100, 200, 255), pygame.font.SysFont(None, 30), 
+        ["1", "2", "3"])
 
     
     def start_game(self):
@@ -46,7 +45,7 @@ class MainGame():
         MainGame.button_list = Button(MainGame.window, "Depth", constants.SCREEN_WIDTH - 200, 300)  
         self.piecesInit()
         self.show_list = False
-      
+        self.show = False 
         
         while True:
             time.sleep(0.1)
@@ -58,8 +57,13 @@ class MainGame():
             self.drawChessboard()
             self.piecesDisplay()
             self.VictoryOrDefeat()
-            pygame.display.flip()
-            self.Computerplay()
+            if self.show == False:
+                pygame.display.flip()
+            if self.Computerplay() == False:
+                MainGame.window.blit(self.getTextSuface("%s" % "WIN !"), (constants.SCREEN_WIDTH - 250, 200))
+                MainGame.Putdownflag = constants.overColor
+                self.show = True
+                pygame.display.flip()
             #pygame.display.flip()
         
         
@@ -148,11 +152,12 @@ class MainGame():
                 selected_option = self.list1.update(eventList)
                 if selected_option >= 0:
                     if selected_option == 0:
-                        cc.max_depth = 2
+                        cc.max_depth = 1 
                     elif selected_option == 1:
-                        cc.max_depth = 3
+                        cc.max_depth = 2
                     elif selected_option == 2:
-                        cc.max_depth = 4
+                        cc.max_depth = 3 
+                
                 pos = pygame.mouse.get_pos()
                 mouse_x = pos[0]
                 mouse_y = pos[1]
@@ -230,8 +235,8 @@ class MainGame():
             #print("computer turn")
 
             computermove = computer.getPlayInfo(MainGame.piecesList, self.from_x, self.from_y, self.to_x, self.to_y, self.mgInit)
-            if computer==None:
-                return
+            if computermove==None:
+                return False 
             piecemove = None
             for item in MainGame.piecesList:
                 if item.x == computermove[0] and item.y == computermove[1]:
@@ -239,9 +244,10 @@ class MainGame():
 
             self.PiecesMove(piecemove, computermove[2], computermove[3])
             MainGame.Putdownflag = MainGame.player1Color
+            return True
 
     def VictoryOrDefeat(self):
-        txt =""
+        txt = ""
         result = [MainGame.player1Color,MainGame.player2Color]
         for item in MainGame.piecesList:
             if type(item) ==pieces.King:

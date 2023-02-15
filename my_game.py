@@ -1,7 +1,6 @@
 import my_chess as mc
 import chess_constants as cc
 import history_heuristic as hh
-import my_relation as mr
 import sqlite3
 
 class my_game:
@@ -23,19 +22,18 @@ class my_game:
         for i in range(len(move_list)):
             move_list[i].score = self.history_table.get_history_score(who, move_list[i])
         move_list.sort(key=lambda x: x.score, reverse=True) # move_ordering
-        if depth == 0:  # stop search 
+        if depth == 0:  # stop search     
             if len(capture_list) == 0: 
                 return self.evaluate(who)
             else: return self.quiescence_search(alpha, beta, who)
-        
-        if checkMate == False and allowNull == True and depth>3:
-            # print ("***********************")
+    
+        if checkMate == False and allowNull == True and depth>=3:
             who = (who+1)%2
             allowNull = False
-            eval = - self.alpha_beta(3, alpha, beta, allowNull )
+            eval = - self.alpha_beta(depth-1, alpha, beta, allowNull )
             who = (who+1)%2
             if(eval >= beta):
-                print ("***********************")
+                print ("******************** ***")
                 return eval; # Cutoff
         
         best_step = move_list[0]
@@ -53,20 +51,14 @@ class my_game:
             if alpha >= beta:
                 best_step = step
                 break
-        
         if best_step.from_x != -1:
             self.history_table.add_history_score(who, best_step, depth)
-        if best_step.from_x == -1:
-            self.best_move = best_step
         return alpha
     
     def evaluate(self, who):  
         self.cnt += 1
-        relation_list = self.init_relation_list()
         base_val = [0, 0]
         pos_val = [0, 0]
-        mobile_val = [0, 0]
-        relation_val = [0, 0]
         for x in range(9):
             for y in range(10):
                 now_chess = self.board.board[x][y]
@@ -83,14 +75,18 @@ class my_game:
                     pos_val[now] += cc.pos_val[type][pos]
                 else:
                     pos_val[now] += cc.pos_val[type][89 - pos]
-                
                 for item in temp_move_list:
-                    
                     temp_chess = self.board.board[item.to_x][item.to_y]  
-                    if temp_chess.belong != now:  
+
+                    if temp_chess.chess_type == cc.kong:  
+                        continue
+                    elif temp_chess.belong != now: 
                         if temp_chess.chess_type == cc.vua:  
                             if temp_chess.belong != who:
                                 return cc.max_val
+                            else: 
+                                continue
+                
         my_max_val = base_val[0] + pos_val[0] 
         my_min_val = base_val[1] + pos_val[1] 
         if who == 0:
@@ -104,7 +100,7 @@ class my_game:
             return beta
         if alpha < stand_pat:
             alpha = stand_pat
-        move_list, capture_list = self.board.generate_move((who+1),checkMate=False)
+        move_list, capture_list = self.board.generate_move(who,checkMate=False)
         for step in capture_list:
             temp = self.move_to(step)
             score = -self.quiescence_search(-beta, -alpha, who)
@@ -114,15 +110,6 @@ class my_game:
             if score > alpha:
                 alpha = score
         return alpha            
-
-
-    def init_relation_list(self):
-        res_list = []
-        for i in range(10):
-            res_list.append([])
-            for j in range(10):
-                res_list[i].append(mr.relation())
-        return res_list
 
     def init_lib(self):
         conn = sqlite3.connect("./init_lib/chess.db")

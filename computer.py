@@ -6,13 +6,13 @@ import my_game as mg
 import my_chess as mc
 def getPlayInfo(listpieces, from_x, from_y, to_x, to_y, mgInit):
     pieces = movedeep(listpieces ,1 ,constants.player2Color, from_x, from_y, to_x, to_y, mgInit)
+    if pieces == None: 
+        return None 
     return [pieces[0].x, pieces[0].y, pieces[1], pieces[2]]
 
 def movedeep(listpieces, deepstep, player, x1, y1, x2, y2, mgInit):
-
     # temp.board.print_board()
     s = mc.step(8 - x1, y1, 8 - x2, y2)
-    print('ren')
     print(s)
     mgInit.move_to(s)
     # temp.evaluate(True)
@@ -32,13 +32,8 @@ def movedeep(listpieces, deepstep, player, x1, y1, x2, y2, mgInit):
                 if item.x == 8 - t.from_x and item.y == t.from_y:
                     listMoveEnabel.append([item, 8 - t.to_x, t.to_y])
                 
-
-
-
-    #
-    #print(listMoveEnabel)
     if not listMoveEnabel:
-        listMoveEnabel.append([item, 8 - t.to_x, t.to_y])
+        return None
     piecesbest = listMoveEnabel[0]
     return piecesbest
         
