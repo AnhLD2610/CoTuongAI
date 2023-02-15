@@ -8,10 +8,10 @@ Xây dựng một botAI đánh cờ tướng sử dụng thuật toán Minimax v
 - Move Ordering 
 
 Thành viên nhóm:
-Lê Đức Anh 20204628 
-Lữ Thanh Tùng 20204702
-Nguyễn Thành Minh 20200409 
-Đoàn Tuấn Đạt 20204526 
+- Lê Đức Anh 20204628 
+- Lữ Thanh Tùng 20204702
+- Nguyễn Thành Minh 20200409 
+- Đoàn Tuấn Đạt 20204526 
 
 Đánh giá kết quả
 Có thể đánh thắng một số app cờ tướng online.
